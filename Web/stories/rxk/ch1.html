@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>R x K - Chapter 1</title>
+    <!-- Favicon (Naik 2 folder ke root) -->
+    <link rel="shortcut icon" href="../../dlwl_t.png" type="image/png">
+    
+    <!-- Google Fonts: Orbitron & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="../story.js"></script>
+    
+    <style>
+        /* --- RESET & VARIABLES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --bg-color: #000000;
+            --text-color: #ffffff;
+            --text-highlight: #a3a3a3;
+            --text-muted: #737373;
+            --border-color: #262626;
+            --card-bg: #050505;
+            --btn-grey: #404040;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        /* --- NAVBAR --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background-color: #000000;
+            border-bottom: 1px solid var(--border-color);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: #ffffff;
+        }
+
+        /* --- MAIN CONTAINER --- */
+        main {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 120px 6% 80px 6%;
+        }
+
+        /* Header Laman */
+        .page-header {
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .page-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-highlight);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        /* --- CHAPTER HEADER --- */
+        .chapter-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .chapter-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .chapter-meta {
+            font-size: 13px;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .chapter-meta span strong {
+            color: var(--text-highlight);
+        }
+
+        /* --- ISI CERITA / READING CONTENT --- */
+        .reading-content {
+            font-size: 16px;
+            color: #e5e5e5;
+            line-height: 1.8;
+            letter-spacing: 0.3px;
+        }
+
+        .reading-content p {
+            margin-bottom: 24px;
+            text-indent: 20px;
+            text-align: justify;
+        }
+
+        /* Styling default untuk tag strong di dalam cerita */
+        .reading-content strong {
+            color: #ffffff; /* Membuat teks bold sedikit lebih terang menyala */
+            font-weight: 700;
+        }
+
+        .status-msg {
+            text-align: center;
+            color: var(--text-muted);
+            font-style: italic;
+            font-size: 14px;
+            padding: 40px 0;
+        }
+
+        /* --- CHAPTER NAVIGATION --- */
+        .chapter-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 42px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            border-color: var(--text-highlight);
+            background-color: #121212;
+        }
+
+        .nav-arrow {
+            width: 42px;
+            font-size: 16px;
+            padding: 0;
+            flex-shrink: 0;
+        }
+
+        .nav-btn.primary-btn {
+            background-color: var(--btn-grey);
+            border-color: var(--btn-grey);
+            padding: 0 24px;
+            flex: 1;
+            max-width: 220px;
+        }
+
+        .nav-btn.primary-btn:hover {
+            background-color: #525252;
+            border-color: #525252;
+        }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 600px) {
+            main {
+                padding-top: 100px;
+            }
+
+            .page-title {
+                font-size: 20px;
+            }
+
+            .chapter-title {
+                font-size: 18px;
+            }
+
+            .reading-content {
+                font-size: 15px;
+                line-height: 1.7;
+            }
+
+            .chapter-nav {
+                gap: 6px;
+            }
+
+            .nav-btn.primary-btn {
+                max-width: 100%;
+                font-size: 11px;
+                padding: 0 12px;
+            }
+
+            .nav-btn, .nav-arrow {
+                height: 38px;
+            }
+
+            .nav-arrow {
+                width: 38px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="../../index.html" class="logo-container">
+            <img src="../../dlwl_t.png" alt="Dlawals Logo" class="logo-img">
+            <span class="logo-text">DLAWALS</span>
+        </a>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <h1 class="page-title">R x K</h1>
+        </div>
+
+        <section class="chapter-header">
+            <h2 class="chapter-title">Chapter 1: Introduction</h2>
+            <div class="chapter-meta">
+                <span>Rilis: <strong>15 Mar 2025</strong></span>
+                <span>Author: <strong>Rio</strong></span>
+            </div>
+        </section>
+
+        <!-- KONTEN BACAAN (DILANGSUNGKAN LEWAT JAVASCRIPT) -->
+        <article class="reading-content" id="storyContent">
+            <p class="status-msg">Memuat cerita...</p>
+        </article>
+
+        <!-- NAVIGASI CHAPTER -->
+        <section class="chapter-nav">
+            <a href="#" class="nav-btn nav-arrow">&lt;</a>
+            <a href="rxk.html" class="nav-btn primary-btn">Daftar Chapter</a>
+            <a href="ch2.html" class="nav-btn nav-arrow">&gt;</a>
+        </section>
+    </main>
+</body>
+</html>

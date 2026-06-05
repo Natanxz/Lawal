@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dlawals - Members</title>
+    <link rel="shortcut icon" href="../dlwl_t.png" type="image/png">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --bg-color: #000000;
+            --text-color: #ffffff;
+            --text-highlight: #a3a3a3;
+            --text-muted: #737373;
+            --border-color: #262626;
+            --btn-grey: #404040;
+            --owner-color: #ffffff; /* Putih bersih untuk Owner */
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background-color: #000000;
+            border-bottom: 1px solid var(--border-color);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: #ffffff;
+        }
+
+        main {
+            max-width: 1000px; /* Diperlebar agar muat grid kartu */
+            margin: 0 auto;
+            padding: 120px 8% 60px 8%;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .page-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-highlight);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding-bottom: 15px;
+        }
+
+        /* --- SEARCH BAR --- */
+        .search-container {
+            margin-bottom: 40px;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 20px;
+            background-color: #050505;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--text-highlight);
+        }
+
+        /* --- MEMBER GRID --- */
+        .member-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        /* --- KARTU MEMBER (DUPLICATABLE CARD) --- */
+        .member-card {
+            background-color: #050505;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+            text-decoration: none; /* Membuat seluruh kotak bisa diklik */
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .member-card:hover {
+            border-color: var(--text-highlight);
+            transform: translateY(-2px);
+        }
+
+        /* Foto Profil (1:1 Ratio) */
+        .member-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #171717;
+            margin-bottom: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .member-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: filter 0.2s ease;
+        }
+
+        .member-card:hover .member-avatar img {
+            filter: grayscale(0%);
+        }
+
+        .member-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .member-status {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* --- EKSKLUSIF STYLE UNTUK MEMBER #1 (OWNER) --- */
+        .member-card.owner {
+            border-color: var(--owner-color); /* Border Putih Solid */
+            background-color: #0a0a0a;
+        }
+
+        .member-card.owner .member-avatar {
+            border-color: var(--owner-color);
+        }
+
+        .member-card.owner .member-name {
+            color: var(--owner-color);
+        }
+
+        .owner-badge {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background-color: #ffffff;
+            color: #000000;
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-top: 8px;
+            text-transform: uppercase;
+        }
+        .special-badge {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background-color: #bbf0ff;
+            color: #000000;
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-top: 8px;
+            text-transform: uppercase;
+        }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 600px) {
+            main {
+                padding-top: 100px;
+            }
+
+            .page-title {
+                font-size: 20px;
+            }
+
+            .member-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="../index.html" class="logo-container">
+            <img src="../dlwl_t.png" alt="Dlawals Logo" class="logo-img">
+            <span class="logo-text">DLAWALS</span>
+        </a>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <h1 class="page-title">Member List</h1>
+        </div>
+
+        <!-- SEARCH BAR -->
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Cari member...">
+        </div>
+
+        <!-- GRID CONTAINER UNTUK MEMBER -->
+        <div class="member-grid" id="memberGrid">
+
+            <!-- ========================================== -->
+            <!-- MEMBER 0 (EKSKLUSIF OWNER/FOUNDER) -->
+            <!-- ========================================== -->
+            <a href="../member/nael.html" class="member-card owner">
+                <div class="member-avatar">
+                    <img src="../images/members/nael.jpg" alt="#1">
+                </div>
+                <h2 class="member-name">Nael</h2>
+                <!-- Badge eksklusif Owner -->
+                <span class="owner-badge">Owner</span>
+            </a>
+            <!-- ========================================== -->
+
+            <!-- ========================================== -->
+            <!-- MEMBER 1 (BISA DIDUPLIKAT DARI SINI) -->
+            <!-- ========================================== -->
+            <a href="../member/axcel.html" class="member-card">
+                <div class="member-avatar">
+                    <img src="../images/members/axcel.jpg" alt="#2">
+                </div>
+                <h2 class="member-name">Axcel</h2>
+                <span class="special-badge">Admin</span>
+            </a>
+            <!-- ========================================== -->
+
+            <!-- MEMBER 2 -->
+            <a href="../member/abdul.html" class="member-card">
+                <div class="member-avatar">
+                    <img src="../images/members/abdul.jpg" alt="#3">
+                </div>
+                <h2 class="member-name">Abdul</h2>
+                <span class="member-status">Member</span>
+            </a>
+
+            <!-- MEMBER 3 -->
+            <a href="../member/akmal.html" class="member-card">
+                <div class="member-avatar">
+                    <img src="../images/members/akmal.png" alt="#3">
+                </div>
+                <h2 class="member-name">Akmal</h2>
+                <span class="member-status">Member</span>
+            </a>
+
+            <!-- MEMBER 4 -->
+            <a href="../member/aubrey.html" class="member-card">
+                <div class="member-avatar">
+                    <img src="../images/members/aubrey.png" alt="#4">
+                </div>
+                <h2 class="member-name">Aubrey</h2>
+                <span class="member-status">Member</span>
+            </a>
+
+            <a href="../member/ayas.html" class="member-card">
+                <div class="member-avatar">
+                    <img src="../images/members/ayas.png" alt="#4">
+                </div>
+                <h2 class="member-name">Ayas</h2>
+                <span class="member-status">Member</span>
+            </a>
+
+            <!-- MEMBER 5 -->
+            <a href="../member/calista.html" class="member-card">
+                <div class="member-avatar">
+                    <img src="../images/members/blank.png" alt="#5">
+                </div>
+                <h2 class="member-name">Calista</h2>
+                <span class="member-status">Member</span>
+            </a>
+
+            <!-- MEMBER 6 -->
+            <a href="../member/chokis.html" class="member-card">
+                <div class="member-avatar">
+                    <img src="../images/members/blank.png" alt="#6">
+                </div>
+                <h2 class="member-name">Chokis</h2>
+                <span class="member-status">Member</span>
+            </a>
+
+            <!-- MEMBER 7 -->
+            <a href="../member/diana.html" class="member-card">
+                <div class="member-avatar">
+                    <img src="../images/members/blank.png" alt="#7">
+                </div>
+                <h2 class="member-name">Diana</h2>
+                <span class="member-status">Member</span>
+            </a>
+
+            <!-- MEMBER 8 -->
+            <a href="../member/fian.html" class="member-card">
+                <div class="member-avatar">
+                    <img src="../images/members/blank.png" alt="#8">
+                </div>
+                <h2 class="member-name">Fian</h2>
+                <span class="member-status">Member</span>
+            </a>
+
+            <!-- MEMBER 9 -->
+            <a href="../member/kaden.html" class="member-card">
+                <div class="member-avatar">
+                    <img src="../images/members/kaden.png" alt="#9">
+                </div>
+                <h2 class="member-name">Kaden</h2>
+                <span class="member-status">Member</span>
+            </a>
+
+            <!-- MEMBER 10 -->
+            <a href="../member/kael.html" class="member-card">
+                <div class="member-avatar">
+                    <img src="../images/members/kael.png" alt="#10">
+                </div>
+                <h2 class="member-name">Kael</h2>
+                <span class="member-status">Member</span>
+            </a>
+
+            <!-- MEMBER 11 -->
+            <a href="../member/lio.html" class="member-card">
+                <div class="member-avatar">
+                    <img src="../images/members/lio.png" alt="#11">
+                </div>
+                <h2 class="member-name">Lio</h2>
+                <span class="member-status">Member</span>
+            </a>
+
+            <!-- MEMBER 12 -->
+            <a href="../member/luksi.html" class="member-card">
+                <div class="member-avatar">
+                    <img src="../images/members/blank.png" alt="#12">
+                </div>
+                <h2 class="member-name">Luksi</h2>
+                <span class="member-status">Member</span>
+            </a>
+
+            <!-- MEMBER 13 -->
+            <a href="../member/mike.html" class="member-card">
+                <div class="member-avatar">
+                    <img src="../images/members/mike.png" alt="#13">
+                </div>
+                <h2 class="member-name">Mike</h2>
+                <span class="member-status">Member</span>
+            </a>
+
+            <!-- MEMBER 14 -->
+            <a href="../member/rio.html" class="member-card">
+                <div class="member-avatar">
+                    <img src="../images/members/rio.png" alt="#14">
+                </div>
+                <h2 class="member-name">Rio</h2>
+                <span class="member-status">Member</span>
+            </a>
+
+            <!-- MEMBER 15 -->
+            <a href="../member/syafa.html" class="member-card">
+                <div class="member-avatar">
+                    <img src="../images/members/syafa.png" alt="#15">
+                </div>
+                <h2 class="member-name">Syafa</h2>
+                <span class="member-status">Member</span>
+            </a>
+
+            <!-- MEMBER 16 -->
+            <a href="../member/putra.html" class="member-card">
+                <div class="member-avatar">
+                    <img src="../images/members/blank.png" alt="#16">
+                </div>
+                <h2 class="member-name">Putra</h2>
+                <span class="member-status">Member</span>
+            </a>
+            
+            <a href="../member/vall.html" class="member-card">
+                <div class="member-avatar">
+                    <img src="../images/members/vall.png" alt="#17">
+                </div>
+                <h2 class="member-name">Vall</h2>
+                <span class="member-status">Member</span>
+            </a>
+
+            <!-- MEMBER 17 -->
+            <a href="../member/zan.html" class="member-card">
+                <div class="member-avatar">
+                    <img src="../images/members/zan.png" alt="#17">
+                </div>
+                <h2 class="member-name">Zan</h2>
+                <span class="member-status">Member</span>
+            </a>
+
+        </div>
+    </main>
+
+    <!-- JAVASCRIPT UNTUK FITUR PENCARIAN -->
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const memberCards = document.querySelectorAll('.member-card');
+
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase().trim();
+
+            memberCards.forEach(card => {
+                const memberName = card.querySelector('.member-name').textContent.toLowerCase();
+                
+                if (memberName.includes(searchTerm)) {
+                    card.style.display = 'flex'; // Tampilkan kartu jika cocok
+                } else {
+                    card.style.display = 'none'; // Sembunyikan kartu jika tidak cocok
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
