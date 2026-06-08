@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class IQ - Create Assignment</title>
+    <link rel="shortcut icon" href="../dlwl_t.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        :root { --bg-color: #000000; --text-color: #ffffff; --text-highlight: #a3a3a3; --text-muted: #737373; --border-color: #262626; --card-bg: #050505; --btn-grey: #404040; }
+        body { background-color: var(--bg-color); color: var(--text-color); padding-bottom: 100px; overflow-x: hidden; }
+        
+        /* HEADER SESUAI TEMPLATE */
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 8%; background-color: #000000; border-bottom: 1px solid var(--border-color); position: fixed; width: 100%; top: 0; z-index: 1000; }
+        .logo-container { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-img { width: 28px; height: 28px; object-fit: contain; }
+        .logo-text { font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: 1.5px; color: #ffffff; }
+        
+        main { max-width: 800px; margin: 0 auto; padding: 120px 8% 60px 8%; }
+        
+        .page-title { font-family: 'Orbitron', sans-serif; font-size: 24px; font-weight: 700; color: var(--text-highlight); text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 30px; }
+
+        .builder-header { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; margin-bottom: 24px; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 13px; color: var(--text-highlight); margin-bottom: 8px; font-weight: 600; text-transform: uppercase; }
+        .input-box { width: 100%; padding: 10px 14px; background: #000; border: 1px solid var(--border-color); border-radius: 4px; color: #fff; font-size: 14px; outline: none; }
+        .input-box:focus { border-color: var(--text-highlight); }
+        
+        .item-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; margin-bottom: 20px; position: relative; }
+        .delete-btn { position: absolute; top: 15px; right: 20px; background: none; border: none; color: #ff4444; cursor: pointer; font-weight: bold; font-size: 12px; }
+        
+        /* CUSTOM RADIO MENGIKUTI IPB.HTML */
+        .option-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: 1px solid var(--border-color); border-radius: 4px; background-color: #000; margin-bottom: 8px; transition: 0.2s; }
+        .option-row:focus-within { border-color: var(--text-muted); background-color: #0c0c0c; }
+        
+        .custom-radio { appearance: none; width: 16px; height: 16px; border: 1px solid var(--text-muted); border-radius: 50%; outline: none; display: inline-grid; place-content: center; cursor: pointer; background-color: transparent; flex-shrink: 0; margin: 0; }
+        .custom-radio::before { content: ""; width: 8px; height: 8px; border-radius: 50%; transform: scale(0); transition: 0.1s transform ease-in-out; background-color: #ffffff; }
+        .custom-radio:checked::before { transform: scale(1); }
+        .custom-radio:checked { border-color: #ffffff; }
+        
+        .opt-val { flex: 1; background: transparent; border: none; color: #fff; font-size: 14px; outline: none; padding: 0; }
+        
+        /* BUTTONS */
+        .controls { display: flex; gap: 10px; margin-bottom: 30px; }
+        .btn { flex: 1; padding: 12px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--btn-grey); color: #fff; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; transition: 0.2s; }
+        .btn:hover { background: #525252; border-color: var(--text-highlight); }
+        .btn-primary { background: #fff; color: #000; width: 100%; padding: 16px; font-size: 13px; margin-top: 10px; }
+        .btn-primary:hover { background: #e0e0e0; }
+
+        /* OVERLAY 2-STEP VERIFICATION */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); display: flex; justify-content: center; align-items: center; z-index: 9999; padding: 20px; }
+        .modal-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; width: 100%; max-width: 400px; padding: 30px; text-align: center; }
+        .modal-title { font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-highlight); }
+        .modal-input { width: 100%; padding: 12px; background-color: #000000; border: 1px solid var(--border-color); border-radius: 4px; color: #ffffff; font-size: 14px; text-align: center; outline: none; margin-bottom: 15px; }
+        .modal-input:focus { border-color: var(--text-highlight); }
+    </style>
+</head>
+<body>
+    
+    <div class="modal-overlay" id="step2Overlay">
+        <div class="modal-card">
+            <h3 class="modal-title">Langkah 2: Verifikasi Keamanan</h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">
+                Untuk keamanan ganda, silakan konfirmasi kembali akun dan kata sandi kamu.
+            </p>
+            <input type="text" id="verifyUser" class="modal-input" placeholder="Username" autocomplete="off">
+            <input type="password" id="verifyPass" class="modal-input" placeholder="Password">
+            <button class="btn btn-primary" style="margin-top: 5px; padding: 12px;" onclick="verifyStep2()">Buka Builder</button>
+        </div>
+    </div>
+
+    <header>
+        <a href="assignment.html" class="logo-container">
+            <img src="../dlwl_t.png" alt="Dlawals Logo" class="logo-img">
+            <span class="logo-text">DLAWALS</span>
+        </a>
+    </header>
+
+    <main id="builderMain" style="display: none;">
+        <h1 class="page-title">Builder Tugas</h1>
+
+        <div class="builder-header">
+            <div class="input-group">
+                <label>Judul Penugasan</label>
+                <input type="text" id="assignmentTitle" class="input-box" placeholder="Contoh: Kuis Matematika Bab 1">
+            </div>
+            <div class="input-group">
+                <label style="margin-top: 15px;">Tenggat Waktu</label>
+                <input type="datetime-local" id="assignmentDeadline" class="input-box">
+            </div>
+        </div>
+
+        <div id="itemList"></div>
+
+        <div class="controls">
+            <button class="btn" onclick="addParagraph()">+ Paragraph</button>
+            <button class="btn" onclick="addQuestion()">+ Question</button>
+        </div>
+
+        <button class="btn btn-primary" onclick="saveAssignment()">Simpan Penugasan & Publikasi</button>
+    </main>
+
+    <script>
+        let itemCounter = 0;
+        let globalUser = "";
+        let globalPass = "";
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const tempUser = sessionStorage.getItem('tempTeacherUser');
+            if(tempUser) {
+                document.getElementById("verifyUser").value = tempUser;
+            }
+        });
+
+        // VERIFIKASI LANGKAH 2 MENCEGAH BYPASS
+        async function verifyStep2() {
+            const u = document.getElementById("verifyUser").value;
+            const p = document.getElementById("verifyPass").value;
+            
+            if(!u || !p) return alert("Harap isi username dan password!");
+
+            try {
+                const res = await fetch('/api/verify-teacher', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: u, password: p })
+                });
+                const data = await res.json();
+                
+                if(data.success) {
+                    globalUser = u;
+                    globalPass = p;
+                    document.getElementById("step2Overlay").style.display = "none";
+                    document.getElementById("builderMain").style.display = "block";
+                    sessionStorage.removeItem('tempTeacherUser'); // Bersihkan sisa
+                } else {
+                    alert("Akses Ditolak: " + data.message);
+                }
+            } catch (error) {
+                alert("Kesalahan koneksi ke server.");
+            }
+        }
+
+        function addParagraph() {
+            const id = itemCounter++;
+            const html = `
+                <div class="item-card" id="item_${id}" data-type="paragraph">
+                    <button class="delete-btn" onclick="removeItem(${id})">X HAPUS</button>
+                    <div class="input-group">
+                        <label>Teks Paragraf / Bacaan</label>
+                        <textarea class="input-box p-text" rows="4" placeholder="Ketik teks bacaan di sini..."></textarea>
+                    </div>
+                </div>
+            `;
+            document.getElementById("itemList").insertAdjacentHTML('beforeend', html);
+        }
+
+        function addQuestion() {
+            const id = itemCounter++;
+            const html = `
+                <div class="item-card" id="item_${id}" data-type="question">
+                    <button class="delete-btn" onclick="removeItem(${id})">X HAPUS</button>
+                    <div class="input-group">
+                        <label>Pertanyaan Soal</label>
+                        <textarea class="input-box q-text" rows="2" placeholder="Masukkan soal di sini..."></textarea>
+                    </div>
+                    <label style="font-size:11px; color:var(--text-muted); margin-bottom:10px; display:block; text-transform:none;">*Pilih bulatan untuk menandai jawaban yang benar.</label>
+                    <div class="options-container" id="opts_${id}">
+                        <label class="option-row">
+                            <input type="radio" class="custom-radio" name="ans_${id}" value="0" checked>
+                            <input type="text" class="opt-val" placeholder="Opsi A">
+                        </label>
+                        <label class="option-row">
+                            <input type="radio" class="custom-radio" name="ans_${id}" value="1">
+                            <input type="text" class="opt-val" placeholder="Opsi B">
+                        </label>
+                    </div>
+                    <button onclick="addOption(${id})" style="background:none; border:none; color:var(--text-highlight); font-size:12px; cursor:pointer; font-weight:bold; margin-top:10px;">+ Tambah Opsi</button>
+                </div>
+            `;
+            document.getElementById("itemList").insertAdjacentHTML('beforeend', html);
+        }
+
+        function addOption(itemId) {
+            const container = document.getElementById(`opts_${itemId}`);
+            const index = container.children.length;
+            const html = `
+                <label class="option-row">
+                    <input type="radio" class="custom-radio" name="ans_${itemId}" value="${index}">
+                    <input type="text" class="opt-val" placeholder="Opsi Tambahan">
+                </label>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+        }
+
+        function removeItem(id) {
+            document.getElementById(`item_${id}`).remove();
+        }
+
+        async function saveAssignment() {
+            const title = document.getElementById("assignmentTitle").value.trim();
+            const rawDeadline = document.getElementById("assignmentDeadline").value;
+            
+            if(!title || !rawDeadline) return alert("Judul dan Tenggat Waktu harus diisi!");
+            
+            const itemNodes = document.querySelectorAll(".item-card");
+            if(itemNodes.length === 0) return alert("Tambahkan minimal 1 pertanyaan atau paragraf.");
+
+            // KONVERSI WAKTU LOKAL USER MENJADI STANDAR ISO UTC STRING
+            const deadline = new Date(rawDeadline).toISOString();
+
+            let items = [];
+            for (let node of itemNodes) {
+                const type = node.getAttribute("data-type");
+                if(type === 'paragraph') {
+                    const text = node.querySelector(".p-text").value.trim();
+                    if(!text) return alert("Ada kolom paragraf yang kosong!");
+                    items.push({ type: 'paragraph', text });
+                } 
+                else if (type === 'question') {
+                    const questionText = node.querySelector(".q-text").value.trim();
+                    if(!questionText) return alert("Ada kolom soal yang kosong!");
+                    
+                    const optNodes = node.querySelectorAll(".opt-val");
+                    let options = [];
+                    optNodes.forEach(o => options.push(o.value.trim()));
+                    if(options.some(o => o === "")) return alert("Ada opsi jawaban yang masih kosong!");
+                    
+                    const selectedAns = node.querySelector(`input[type="radio"]:checked`);
+                    if(!selectedAns) return alert("Pilih jawaban yang benar pada setiap soal!");
+                    
+                    items.push({
+                        type: 'question',
+                        question: questionText,
+                        options: options,
+                        answerIndex: parseInt(selectedAns.value)
+                    });
+                }
+            }
+
+            // MENGIRIM KREDENSIAL YANG DISIMPAN KE SERVER (SECURITY CHECK)
+            try {
+                const res = await fetch('/api/assignments/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        title, 
+                        deadline, 
+                        items,
+                        username: globalUser,
+                        password: globalPass
+                    })
+                });
+
+                const data = await res.json();
+                if(data.success) {
+                    alert("Tugas berhasil ditambahkan!");
+                    window.location.href = "assignment.html";
+                } else {
+                    alert("Gagal: " + data.message);
+                }
+            } catch(e) {
+                alert("Kesalahan koneksi saat menyimpan.");
+            }
+        }
+    </script>
+</body>
+</html>

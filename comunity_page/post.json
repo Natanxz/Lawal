@@ -1,0 +1,32 @@
+[
+  {
+    "id": "post_1780747522499",
+    "username": "naelaja",
+    "title": "Test",
+    "description": "Halo",
+    "media": "",
+    "mediaType": "image",
+    "date": "2026-06-06T12:05:22.499Z",
+    "likes": 6701
+  },
+  {
+    "id": "post_1780748042516",
+    "username": "naelaja",
+    "title": "Buat akun",
+    "description": "Wa gw aja yg mau bikin ygy, bosan",
+    "media": "https://files.catbox.moe/vrvgjn.png",
+    "mediaType": "image",
+    "date": "2026-06-06T12:14:02.516Z",
+    "likes": 6901
+  },
+  {
+    "id": "post_1780847160263",
+    "username": "naelaja",
+    "title": "Video with tupri lohya",
+    "description": "Kenang kenangan",
+    "media": "https://files.catbox.moe/t59u5p.mp4",
+    "mediaType": "video",
+    "date": "2026-06-07T15:46:00.263Z",
+    "likes": 2
+  }
+]

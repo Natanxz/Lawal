@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Akun - Dlawals</title>
+    <link rel="shortcut icon" href="../dlwl_t.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: #000; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .auth-box { border: 1px solid #262626; background-color: #0a0a0a; padding: 30px; border-radius: 8px; width: 90%; max-width: 400px; text-align: center; }
+        .auth-title { font-family: 'Orbitron', sans-serif; font-size: 22px; margin-bottom: 20px; }
+        .auth-input { width: 100%; padding: 12px; margin-bottom: 15px; background: #000; border: 1px solid #262626; color: #fff; border-radius: 4px; font-size: 14px; }
+        .auth-btn { width: 100%; padding: 12px; border-radius: 4px; font-size: 14px; font-weight: 600; cursor: pointer; border: 1px solid #262626; background-color: #404040; color: #fff; }
+        .auth-btn:hover { background-color: #525252; }
+        .error-msg { color: #ef4444; font-size: 13px; margin-bottom: 15px; display: none; }
+        .link { color: #a3a3a3; font-size: 12px; display: block; margin-top: 15px; cursor: pointer; text-decoration: none; }
+        .link:hover { color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="auth-box">
+        <h2 class="auth-title">REGISTER</h2>
+        <div class="error-msg" id="regError"></div>
+        <input type="text" id="regUser" class="auth-input" placeholder="Username (Tanpa karakter unik)">
+        <input type="password" id="regPass" class="auth-input" placeholder="Password">
+        <input type="password" id="regPassConfirm" class="auth-input" placeholder="Konfirmasi Password">
+        <button class="auth-btn" id="btnRegister">DAFTAR & LOGIN</button>
+        <a href="forum.html" class="link">Sudah punya akun? Kembali ke Forum</a>
+    </div>
+
+    <script>
+        document.getElementById("btnRegister").addEventListener("click", async () => {
+            const username = document.getElementById("regUser").value;
+            const pass = document.getElementById("regPass").value;
+            const passConfirm = document.getElementById("regPassConfirm").value;
+            const errBox = document.getElementById("regError");
+
+            if (!username || !pass || !passConfirm) {
+                errBox.style.display = "block"; errBox.textContent = "Semua kolom wajib diisi!"; return;
+            }
+            if (pass !== passConfirm) {
+                errBox.style.display = "block"; errBox.textContent = "Password tidak cocok!"; return;
+            }
+
+            try {
+                const res = await fetch('/api/community/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password: pass })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    localStorage.setItem("dlawals_user", JSON.stringify(data.user));
+                    window.location.href = "forum.html";
+                } else {
+                    errBox.style.display = "block"; errBox.textContent = data.message;
+                }
+            } catch (err) {
+                errBox.style.display = "block"; errBox.textContent = "Terjadi kesalahan server.";
+            }
+        });
+    </script>
+</body>
+</html>

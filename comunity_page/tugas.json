@@ -1,0 +1,112 @@
+[
+  {
+    "id": "tugas_1780843538207",
+    "title": "Bahasa Indonesia",
+    "teacher": "Nael",
+    "deadline": "2026-06-08T06:00:00.000Z",
+    "items": [
+      {
+        "type": "question",
+        "question": "\"Meskipun mengalami banyak rintangan, ia tetap gigih mencapai cita-citanya.\"\nMakna kata gigih adalah ....",
+        "options": [
+          "Mudah menyerah",
+          "Rajin dan tekun",
+          "Sombong dan angkuh",
+          "Ragu ragu"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "type": "paragraph",
+        "text": "Membaca buku memiliki banyak manfaat. Selain menambah wawasan, membaca juga dapat meningkatkan kemampuan berpikir kritis dan memperkaya kosakata."
+      },
+      {
+        "type": "question",
+        "question": "Ide pokok paragraf tersebut adalah",
+        "options": [
+          "Cara meningkatkan kosakata",
+          "Pentingnya berpikir kritis",
+          "Manfaat membaca buku",
+          "Jenis-jenis buku"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "type": "question",
+        "question": "Kalimat yang paling efektif",
+        "options": [
+          "Para siswa-siswa sedang belajar di perpustakaan.",
+          "Siswa-siswa sedang belajar di perpustakaan.",
+          "Para siswa sedang belajar di perpustakaan.",
+          "Para siswa semuanya sedang belajar di perpustakaan."
+        ],
+        "answerIndex": 2
+      },
+      {
+        "type": "question",
+        "question": "Kalimat berikut yang mengandung majas personifikasi adalah ....",
+        "options": [
+          "Wajahnya cantik bagaikan bulan purnama.",
+          "Angin berbisik lembut di antara pepohonan.",
+          "Ia berlari secepat kilat.",
+          "Suaranya menggelegar seperti petir."
+        ],
+        "answerIndex": 1
+      },
+      {
+        "type": "question",
+        "question": "Sinonim kata \"abadi\"",
+        "options": [
+          "Sementara",
+          "Kekal",
+          "Cepat",
+          "Hilang"
+        ],
+        "answerIndex": 1
+      }
+    ],
+    "answeredUids": []
+  },
+  {
+    "id": "tugas_1780843972583",
+    "title": "Ilmu Tiktok",
+    "teacher": "Nael",
+    "deadline": "2026-06-08T07:00:00.000Z",
+    "items": [
+      {
+        "type": "question",
+        "question": "Jika seseorang bertanya, maka...",
+        "options": [
+          "Ejek",
+          "Menjawab",
+          "Diam",
+          "OOT"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "type": "question",
+        "question": "Kata kata 'esempe' baru-baru ini",
+        "options": [
+          "So bakso",
+          "Megawati",
+          "Nyawit",
+          "Mas bahlil ganteng"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "type": "question",
+        "question": "Tiktok dikenal sebagai",
+        "options": [
+          "Aplikasi sarang orang pintar",
+          "Aplikasi sarang monyet",
+          "Aplikasi cinta",
+          "Aplikasi lucu"
+        ],
+        "answerIndex": 1
+      }
+    ],
+    "answeredUids": []
+  }
+]

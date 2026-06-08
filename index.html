@@ -65,7 +65,7 @@
             font-size: 20px;
             font-weight: 700;
             letter-spacing: 1.5px;
-            color: #ffffff; /* Putih Solid tanpa gradient */
+            color: #ffffff;
         }
 
         .nav-links {
@@ -110,7 +110,6 @@
             color: #ffffff;
         }
 
-        /* Highlight text menggunakan warna abu-abu */
         .hero-title span {
             color: var(--text-highlight);
         }
@@ -129,7 +128,7 @@
         .image-container {
             width: 100%;
             max-width: 680px;
-            aspect-ratio: 16 / 8; /* Menjaga rasio gambar tetap 16:8 */
+            aspect-ratio: 16 / 8;
             margin: 0 auto 35px auto;
             border: 1px solid var(--border-color);
             border-radius: 6px;
@@ -141,12 +140,12 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: grayscale(100%); /* Efek hitam-putih agar menyatu dengan tema */
+            filter: grayscale(100%);
             transition: filter 0.3s ease;
         }
 
         .image-container img:hover {
-            filter: grayscale(0%); /* Gambar berwarna kembali saat diarahkan kursor */
+            filter: grayscale(0%);
         }
 
         /* --- BUTTONS --- */
@@ -167,6 +166,8 @@
             letter-spacing: 1px;
             transition: all 0.2s ease;
             cursor: pointer;
+            display: inline-block;
+            text-align: center;
         }
 
         .btn-primary {
@@ -176,7 +177,7 @@
         }
 
         .btn-primary:hover {
-            background-color: #525252; /* Abu-abu sedikit lebih terang */
+            background-color: #525252;
             border-color: #525252;
         }
 
@@ -191,6 +192,90 @@
             border-color: var(--text-highlight);
         }
 
+        /* --- POP-UP / MODAL STYLE --- */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px); /* Efek blur di latar belakang */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        /* Class aktif untuk memunculkan popup via JS */
+        .popup-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .popup-box {
+            background-color: #0a0a0a;
+            border: 1px solid var(--border-color);
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+            transform: scale(0.85);
+            transition: transform 0.4s ease;
+        }
+
+        .popup-overlay.active .popup-box {
+            transform: scale(1);
+        }
+
+        .popup-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .popup-title span {
+            color: var(--text-highlight);
+        }
+
+        .popup-img-container {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            background-color: #171717;
+            margin-bottom: 18px;
+        }
+
+        .popup-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+        }
+
+        .popup-text {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        .popup-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
         /* --- RESPONSIVE DESIGN --- */
         @media (max-width: 768px) {
             header {
@@ -198,7 +283,7 @@
             }
 
             .nav-links {
-                display: none; /* Menu atas disederhanakan untuk tampilan HP */
+                display: none;
             }
 
             .hero-title {
@@ -213,6 +298,14 @@
                 width: 100%;
                 max-width: 280px;
             }
+
+            .popup-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            .popup-buttons .btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -226,6 +319,30 @@
         </div>
     </header>
 
+    <!-- POP-UP AWAL (MODAL) -->
+    <div class="popup-overlay" id="welcomePopup">
+        <div class="popup-box">
+            <!-- Judul Pop-up -->
+            <h2 class="popup-title">Update <span>Dlawals</span></h2>
+            
+            <!-- Gambar Pop-up -->
+            <div class="popup-img-container">
+                <img src="/images/ayano.png" alt="Dlawals Update Image">
+            </div>
+            
+            <!-- Text Deskripsi -->
+            <p class="popup-text">
+                Ada event baru nih <strong>ClassIQ</strong>! Kalau mau ikut, lihat WhatsApp woy.
+            </p>
+            
+            <!-- Tombol Aksi -->
+            <div class="popup-buttons">
+                <a href="./page/classiq.html" class="btn btn-primary">Buka Classiq</a>
+                <button class="btn btn-secondary" id="closePopupBtn">Lewati</button>
+            </div>
+        </div>
+    </div>
+
     <!-- HERO SECTION (HALAMAN UTAMA / PENGENALAN) -->
     <section class="hero">
         <div class="hero-content">
@@ -236,17 +353,41 @@
 
             <!-- GAMBAR DENGAN RASIO 16:8 -->
             <div class="image-container">
-                <!-- Menggunakan gambar bertema gaming dari Unsplash sebagai contoh -->
-                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80" alt="Dlawals Gaming Hub">
+                <img src="/images/classiq.png" alt="Main Hero Image">
             </div>
 
             <!-- TOMBOL AKSI DENGAN LINK BARU -->
             <div class="cta-buttons">
-                <a href="./medsos/medsos.html" class="btn btn-primary">Media Sosial</a>
+                <a href="./comunity_page/forum.html" class="btn btn-primary">Forum Komunitas</a>
                 <a href="./page/comunity.html" class="btn btn-secondary">Lihat Komunitas</a>
             </div>
         </div>
     </section>
+
+    <!-- SCRIPT UNTUK POP-UP -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const popup = document.getElementById("welcomePopup");
+            const closeBtn = document.getElementById("closePopupBtn");
+
+            // Memunculkan pop-up otomatis saat halaman selesai dimuat
+            setTimeout(() => {
+                popup.classList.add("active");
+            }, 300); // delay tipis 300ms agar transisinya halus saat halaman terbuka
+
+            // Menutup pop-up saat tombol 'Lewati' diklik
+            closeBtn.addEventListener("click", () => {
+                popup.classList.remove("active");
+            });
+
+            // Menutup pop-up jika user klik area gelap di luar box pop-up
+            popup.addEventListener("click", (e) => {
+                if (e.target === popup) {
+                    popup.classList.remove("active");
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>

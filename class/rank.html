@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class IQ - Leaderboard</title>
+    <link rel="shortcut icon" href="../dlwl_t.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --bg-color: #000000;
+            --text-color: #ffffff;
+            --text-highlight: #a3a3a3;
+            --text-muted: #737373;
+            --border-color: #262626;
+            --card-bg: #050505;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background-color: #000000;
+            border-bottom: 1px solid var(--border-color);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: #ffffff;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 120px 8% 60px 8%;
+        }
+
+        .page-header {
+            margin-bottom: 40px;
+            text-align: left;
+        }
+
+        .page-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-highlight);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .rank-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .rank-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 18px 24px;
+            transition: all 0.2s ease;
+        }
+
+        .rank-item:hover {
+            border-color: var(--text-muted);
+            background-color: #0c0c0c;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .position {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-muted);
+            width: 30px;
+        }
+
+        /* Highlight posisi peringkat 3 besar */
+        .rank-1 .position { color: #ffffff; }
+        .rank-2 .position { color: #d4d4d4; }
+        .rank-3 .position { color: #a3a3a3; }
+
+        .name {
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* Ukuran teks skor disamakan dengan teks nama agar rapi */
+        .score {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+
+        .fallback-view {
+            text-align: center;
+            padding: 80px 20px;
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+        }
+
+        .fallback-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-highlight);
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 600px) {
+            main {
+                padding-top: 100px;
+            }
+            .page-title {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="../index.html" class="logo-container">
+            <img src="../dlwl_t.png" alt="Dlawals Logo" class="logo-img">
+            <span class="logo-text">DLAWALS</span>
+        </a>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <h1 class="page-title">Leaderboard Rank</h1>
+        </div>
+
+        <div id="rankContent" class="rank-container">
+            <div class="fallback-view">
+                <h2 class="fallback-title">Memuat Peringkat...</h2>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            loadRankings();
+        });
+
+        async function loadRankings() {
+            const rankContent = document.getElementById("rankContent");
+            try {
+                const response = await fetch("user.json");
+                if (!response.ok) throw new Error("Gagal memuat data peringkat.");
+                
+                const users = await response.json();
+                
+                // Urutkan berdasarkan skor tertinggi
+                users.sort((a, b) => b.score - a.score);
+                
+                if (users.length === 0) {
+                    rankContent.innerHTML = `
+                        <div class="fallback-view">
+                            <h2 class="fallback-title">Belum ada data member</h2>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let html = "";
+                users.forEach((user, index) => {
+                    const position = index + 1;
+                    const rankClass = position <= 3 ? `rank-${position}` : "";
+
+                    // Bagian UID benar-benar dihilangkan dari tampilan HTML
+                    html += `
+                        <div class="rank-item ${rankClass}">
+                            <div class="user-info">
+                                <span class="position">#${position}</span>
+                                <div>
+                                    <span class="name">${escapeHtml(user.name)}</span>
+                                </div>
+                            </div>
+                            <div class="score">${user.score}Pts</div>
+                        </div>
+                    `;
+                });
+
+                rankContent.innerHTML = html;
+
+            } catch (err) {
+                console.error(err);
+                rankContent.innerHTML = `
+                    <div class="fallback-view">
+                        <h2 class="fallback-title">Gagal Memuat Rank</h2>
+                        <p style="color: var(--text-muted); font-size: 14px; margin-top: 10px;">Pastikan Node.js sedang berjalan.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+    </script>
+</body>
+</html>

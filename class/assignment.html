@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class IQ - Assignments</title>
+    <link rel="shortcut icon" href="../dlwl_t.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        :root { --bg-color: #000000; --text-color: #ffffff; --text-highlight: #a3a3a3; --text-muted: #737373; --border-color: #262626; --card-bg: #050505; --btn-grey: #404040; }
+        body { background-color: var(--bg-color); color: var(--text-color); overflow-x: hidden; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 8%; background-color: #000000; border-bottom: 1px solid var(--border-color); position: fixed; width: 100%; top: 0; z-index: 1000; }
+        .logo-container { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-img { width: 28px; height: 28px; object-fit: contain; }
+        .logo-text { font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: 1.5px; color: #ffffff; }
+        main { max-width: 900px; margin: 0 auto; padding: 120px 8% 60px 8%; }
+        .page-header { margin-bottom: 40px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
+        .page-title { font-family: 'Orbitron', sans-serif; font-size: 24px; font-weight: 700; color: var(--text-highlight); text-transform: uppercase; letter-spacing: 2px; }
+        
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        
+        /* CARD TUGAS */
+        .assignment-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; transition: 0.2s; text-decoration: none; color: white; display: flex; flex-direction: column; justify-content: space-between; aspect-ratio: 16/9; }
+        .assignment-card:hover { border-color: var(--text-muted); background-color: #0c0c0c; }
+        .card-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+        .card-teacher { font-size: 13px; color: var(--text-muted); margin-bottom: 15px; }
+        .card-footer { font-size: 12px; font-family: 'Orbitron', sans-serif; color: var(--text-highlight); display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 15px; }
+        
+        .btn-kerjakan { width: 100%; padding: 12px; background-color: #ffffff; color: #000000; border: none; border-radius: 4px; font-size: 13px; font-weight: 700; text-transform: uppercase; cursor: pointer; transition: 0.2s; }
+        .assignment-card:hover .btn-kerjakan { background-color: #e0e0e0; }
+
+        /* CARD CREATE TUGAS */
+        .create-card { border: 1px dashed var(--text-muted); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 10px; background-color: transparent; cursor: pointer; }
+        .create-card:hover { background-color: rgba(255,255,255,0.05); border-color: #fff; }
+        .create-icon { font-size: 32px; font-weight: 300; }
+        .create-text { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* MODAL */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.9); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
+        .modal-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; width: 100%; max-width: 400px; padding: 30px; text-align: center; }
+        .modal-title { font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .modal-input { width: 100%; padding: 12px; background-color: #000000; border: 1px solid var(--border-color); border-radius: 4px; color: #ffffff; font-size: 14px; outline: none; margin-bottom: 15px; }
+        .modal-input:focus { border-color: var(--text-highlight); }
+        .modal-btn-row { display: flex; gap: 10px; margin-top: 10px;}
+        .modal-btn { flex: 1; padding: 12px; border-radius: 4px; font-size: 12px; font-weight: 700; text-transform: uppercase; cursor: pointer; border: 1px solid var(--border-color); }
+        .btn-confirm { background-color: #ffffff; color: #000000; }
+        .btn-cancel { background-color: transparent; color: var(--text-muted); }
+        
+        .empty-state { text-align: center; grid-column: 1 / -1; padding: 40px; border: 1px dashed var(--border-color); border-radius: 8px; }
+        .empty-title { font-family: 'Orbitron'; color: var(--text-highlight); margin-bottom: 10px;}
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="../index.html" class="logo-container">
+            <img src="../dlwl_t.png" alt="Dlawals Logo" class="logo-img">
+            <span class="logo-text">DLAWALS</span>
+        </a>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <h1 class="page-title">Daftar Penugasan</h1>
+        </div>
+
+        <div class="grid-container" id="assignmentList">
+            <div class="empty-state" id="loadingState">
+                <h3 class="empty-title">Memuat Tugas...</h3>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="teacherModal">
+        <div class="modal-card">
+            <h3 class="modal-title">Langkah 1: Akses Guru</h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">
+                Masukkan kredensial akun guru kamu untuk masuk ke halaman builder.
+            </p>
+            <input type="text" id="teacherUser" class="modal-input" placeholder="Username" autocomplete="off">
+            <input type="password" id="teacherPass" class="modal-input" placeholder="Password">
+            <div class="modal-btn-row">
+                <button class="modal-btn btn-cancel" onclick="closeTeacherModal()">Batal</button>
+                <button class="modal-btn btn-confirm" onclick="verifyTeacher()">Masuk</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", fetchAssignments);
+
+        async function fetchAssignments() {
+            const list = document.getElementById("assignmentList");
+            const loading = document.getElementById("loadingState");
+            
+            try {
+                const res = await fetch('/api/assignments');
+                const data = await res.json();
+                
+                loading.style.display = 'none';
+                let html = ``;
+
+                if (data.assignments && data.assignments.length > 0) {
+                    data.assignments.forEach(t => {
+                        const date = new Date(t.deadline).toLocaleString('id-ID', {day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute:'2-digit'});
+                        html += `
+                            <div class="assignment-card">
+                                <div>
+                                    <div class="card-title">${escapeHtml(t.title)}</div>
+                                    <div class="card-teacher">Oleh: ${escapeHtml(t.teacher)}</div>
+                                </div>
+                                <div>
+                                    <div class="card-footer">
+                                        <span>Tenggat:</span>
+                                        <span>${date}</span>
+                                    </div>
+                                    <button class="btn-kerjakan" onclick="window.location.href='soal.html?id=${t.id}'">Kerjakan Tugas</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    html += `
+                        <div class="empty-state">
+                            <h3 class="empty-title">Tidak ada tugas</h3>
+                            <p style="color: var(--text-muted); font-size: 14px;">Tunggu guru menambahkan tugas baru.</p>
+                        </div>
+                    `;
+                }
+
+                // Posisi Create Assignment ditambahkan di paling akhir
+                html += `
+                    <div class="assignment-card create-card" onclick="openTeacherModal()">
+                        <div class="create-icon">+</div>
+                        <div class="create-text">Create Assignment</div>
+                    </div>
+                `;
+
+                list.innerHTML = html;
+            } catch (err) {
+                loading.innerHTML = `<h3 class="empty-title">Koneksi Gagal</h3><p style="color:var(--text-muted); font-size:14px;">Pastikan server berjalan.</p>`;
+            }
+        }
+
+        function openTeacherModal() {
+            document.getElementById("teacherModal").style.display = "flex";
+        }
+        function closeTeacherModal() {
+            document.getElementById("teacherModal").style.display = "none";
+            document.getElementById("teacherUser").value = "";
+            document.getElementById("teacherPass").value = "";
+        }
+
+        async function verifyTeacher() {
+            const u = document.getElementById("teacherUser").value;
+            const p = document.getElementById("teacherPass").value;
+            
+            if(!u || !p) return alert("Isi form dengan lengkap.");
+
+            try {
+                const res = await fetch('/api/verify-teacher', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: u, password: p })
+                });
+                const data = await res.json();
+                
+                if(data.success) {
+                    sessionStorage.setItem('tempTeacherUser', u);
+                    window.location.href = "create.html";
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                alert("Kesalahan jaringan.");
+            }
+        }
+
+        function escapeHtml(str) { return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+    </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+[
+  {
+    "username": "naelaja",
+    "password": "admin123",
+    "displayname": "Nael",
+    "uid": "12345345",
+    "teacher": true,
+    "profilePic": "../images/classiq.png"
+  },
+  {
+    "username": "afternoongames",
+    "password": "derio111",
+    "displayname": "Derio",
+    "uid": "99123467",
+    "teacher": true,
+    "profilePic": "../images/members/rio.png"
+  }
+]

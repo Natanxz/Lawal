@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forum Komunitas - Dlawals</title>
+    <link rel="shortcut icon" href="../dlwl_t.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        :root {
+            --bg-color: #000000;
+            --text-color: #ffffff;
+            --text-highlight: #a3a3a3;
+            --text-muted: #737373;
+            --border-color: #262626;
+            --btn-grey: #404040;
+        }
+        body { background-color: var(--bg-color); color: var(--text-color); padding-top: 100px; padding-bottom: 60px; }
+        
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 8%; background-color: #000000; border-bottom: 1px solid var(--border-color); position: fixed; width: 100%; top: 0; z-index: 1000; }
+        .logo-container { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .logo-img { width: 28px; height: 28px; object-fit: contain; }
+        .logo-text { font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: 1.5px; color: #ffffff; }
+        
+        .nav-profile-link { display: flex; align-items: center; cursor: pointer; }
+        .nav-avatar { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border-color); transition: border-color 0.2s; }
+        .nav-avatar:hover { border-color: #ffffff; }
+
+        .forum-wrapper { max-width: 700px; margin: 0 auto; padding: 20px; }
+        .forum-header { margin-bottom: 30px; text-align: left; }
+        .forum-title { font-family: 'Orbitron', sans-serif; font-size: 24px; letter-spacing: 1px; }
+        .forum-title span { color: var(--text-highlight); font-family: 'Orbitron', sans-serif; }
+        
+        .post-card { border: 1px solid var(--border-color); border-radius: 6px; padding: 20px; background-color: #050505; margin-bottom: 25px; }
+        
+        /* Menu 3 Titik */
+        .post-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .post-author-row { display: flex; align-items: center; gap: 10px; }
+        .options-menu { position: relative; cursor: pointer; color: var(--text-muted); font-size: 20px; padding: 0 5px; }
+        .options-dropdown { position: absolute; right: 0; top: 25px; background: #0a0a0a; border: 1px solid var(--border-color); border-radius: 4px; display: none; flex-direction: column; min-width: 130px; z-index: 10; }
+        .options-dropdown.active { display: flex; }
+        .option-btn { padding: 10px; text-align: left; background: none; border: none; color: #ef4444; font-size: 13px; cursor: pointer; width: 100%; }
+        .option-btn:hover { background: #171717; }
+
+        .author-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+        .author-name { font-weight: 600; font-size: 14px; }
+        .author-username { color: var(--text-muted); font-size: 12px; }
+        .post-date { color: var(--text-muted); font-size: 11px; }
+        
+        .post-title { font-size: 18px; margin-bottom: 8px; font-weight: 700; }
+        .post-desc { color: #d4d4d4; font-size: 14px; line-height: 1.5; margin-bottom: 15px; }
+        
+        .post-media { width: 100%; max-height: 380px; object-fit: cover; border: 1px solid var(--border-color); border-radius: 4px; margin-bottom: 15px; }
+        
+        .post-actions { display: flex; gap: 20px; align-items: center; border-top: 1px solid var(--border-color); padding-top: 12px; }
+        .action-item { background: none; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; }
+        .action-item:hover { color: #fff; }
+        
+        .load-more-container { text-align: center; margin: 30px 0; }
+        .load-more-text { color: var(--text-muted); font-size: 14px; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: color 0.2s; }
+        .load-more-text:hover { color: #ffffff; }
+
+        .fab-create-post { position: fixed; bottom: 30px; right: 30px; width: 56px; height: 56px; border-radius: 50%; background-color: #ffffff; color: #000000; border: none; font-size: 28px; font-weight: 400; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1); z-index: 999; transition: transform 0.2s, background-color 0.2s; }
+        .fab-create-post:hover { transform: scale(1.08); background-color: var(--text-highlight); }
+
+        .btn { padding: 10px 20px; border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; cursor: pointer; border: 1px solid var(--border-color); background-color: var(--btn-grey); color: #fff; }
+        .btn:hover { background-color: #525252; }
+
+        .popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .popup-overlay.active { opacity: 1; pointer-events: auto; }
+        .popup-box { background-color: #0a0a0a; border: 1px solid var(--border-color); width: 90%; max-width: 480px; padding: 25px; border-radius: 8px; }
+        .popup-title { font-family: 'Orbitron', sans-serif; font-size: 18px; margin-bottom: 15px; text-align: center; }
+        .popup-input { width: 100%; padding: 10px; margin-bottom: 12px; background: #000; border: 1px solid var(--border-color); color: #fff; border-radius: 4px; font-size: 14px; }
+        .popup-textarea { width: 100%; height: 100px; padding: 10px; margin-bottom: 12px; background: #000; border: 1px solid var(--border-color); color: #fff; border-radius: 4px; font-size: 14px; resize: none; }
+        .popup-error { color: #ef4444; font-size: 12px; margin-bottom: 10px; text-align: center; display: none; }
+        .popup-buttons { display: flex; gap: 10px; justify-content: flex-end; }
+
+        /* Komentar UI */
+        .full-post-content { max-height: 50vh; overflow-y: auto; text-align: left; margin-bottom: 15px; }
+        .comment-section { border-top: 1px solid var(--border-color); padding-top: 15px; }
+        .comment-box { display: flex; gap: 10px; margin-bottom: 15px; }
+        .comment-input { flex: 1; padding: 10px; background: #000; border: 1px solid var(--border-color); color: #fff; border-radius: 4px; }
+        .comment-list { max-height: 30vh; overflow-y: auto; }
+        .comment-item { font-size: 13px; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed #262626; }
+        .comment-author { font-weight: 600; color: var(--text-highlight); margin-right: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container" onclick="window.location.href='../index.html'">
+            <img src="../dlwl_t.png" alt="Logo" class="logo-img">
+            <span class="logo-text">DLAWALS</span>
+        </div>
+        <div class="nav-profile-link" title="Profil Saya">
+            <img src="../images/members/blank.png" alt="Profile" class="nav-avatar" id="navProfileAvatar">
+        </div>
+    </header>
+
+    <div class="forum-wrapper">
+        <div class="forum-header">
+            <h2 class="forum-title">FORUM <span>KOMUNITAS</span></h2>
+        </div>
+
+        <div id="postsContainer"></div>
+
+        <div class="load-more-container" id="loadMoreSection" style="display: none;">
+            <span class="load-more-text" id="btnLoadMore">Load more</span>
+        </div>
+    </div>
+
+    <button class="fab-create-post" id="btnCreatePost" title="Buat Postingan Baru">+</button>
+
+    <div class="popup-overlay" id="createPostPopup">
+        <div class="popup-box">
+            <h3 class="popup-title">BUAT POST BARU</h3>
+            <div class="popup-error" id="createError"></div>
+            <input type="text" id="postTitleInput" class="popup-input" placeholder="Judul Postingan">
+            <textarea id="postDescInput" class="popup-textarea" placeholder="Tulis deskripsi konten kamu disini..."></textarea>
+            <input type="text" id="postMediaInput" class="popup-input" placeholder="Media URL Gambar / Video (Opsional)">
+            <div class="popup-buttons" style="margin-top: 15px;">
+                <button class="btn" style="background:transparent;" id="btnCancelCreate">Batal</button>
+                <button class="btn" id="btnSubmitPost">Kirim Postingan</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="authPopup">
+        <div class="popup-box" style="max-width: 400px;">
+            <h3 class="popup-title">LOGIN DIPERLUKAN</h3>
+            <div class="popup-error" id="authError"></div>
+            <input type="text" id="authLoginUser" class="popup-input" placeholder="Username">
+            <input type="password" id="authLoginPass" class="popup-input" placeholder="Password">
+            <div class="popup-buttons" style="flex-direction: column; justify-content: center; align-items: center;">
+                <button class="btn" style="background:var(--btn-grey); width: 100%;" id="btnSubmitLogin">Masuk</button>
+                <a href="register.html" style="color:var(--text-highlight); font-size:12px; margin-top:15px; text-decoration:none;">Belum punya akun? Klik di sini</a>
+            </div>
+            <button class="btn" style="margin-top:15px; background:transparent; width:100%; border:none; color:var(--text-muted);" onclick="document.getElementById('authPopup').classList.remove('active')">Batal</button>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="postDetailPopup">
+        <div class="popup-box" style="max-width: 600px;">
+            <div class="full-post-content" id="postDetailContent"></div>
+            <div class="comment-section">
+                <div class="comment-box">
+                    <input type="text" id="newCommentInput" class="comment-input" placeholder="Tulis komentar...">
+                    <button class="btn" id="btnSubmitComment">Kirim</button>
+                </div>
+                <div class="comment-list" id="commentsContainer"></div>
+            </div>
+            <button class="btn" style="margin-top:20px; width:100%; background:transparent;" onclick="document.getElementById('postDetailPopup').classList.remove('active')">Tutup</button>
+        </div>
+    </div>
+
+    <script src="forum.js"></script>
+</body>
+</html>
